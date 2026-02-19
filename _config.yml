@@ -1,0 +1,8 @@
+title: Connor McIlwain
+description: AI Software Engineer — MLOps, GenAI, and ML systems. Based in Belfast.
+url: "https://connormcilwain.github.io"
+baseurl: ""
+
+remote_theme: pages-themes/minimal@v0.2.0
+plugins:
+  - jekyll-remote-theme

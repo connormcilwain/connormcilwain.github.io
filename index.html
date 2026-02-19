@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connor McIlwain | AI Software Engineer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav id="navbar">
+        <div class="nav-inner">
+            <a href="#hero" class="nav-logo">CM</a>
+            <ul class="nav-links">
+                <li><a href="#work">Work</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#education">Education</a></li>
+                <li><a href="#contact">Contact</a></li>
+
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ===== HERO ===== -->
+    <section id="hero">
+        <div class="hero-bg">
+            <div class="hero-glow"></div>
+            <div class="hero-glow-2"></div>
+            <div class="grid-overlay"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-avatar-wrap">
+                <div class="hero-avatar">
+                    <img src="avatar.jpg" alt="Connor McIlwain">
+                </div>
+            </div>
+            <div class="hero-text">
+                <p class="hero-label">// ai software engineer</p>
+                <h1 class="hero-name">Connor <span class="gradient-text">McIlwain</span></h1>
+                <p class="hero-sub">4+ years productionising scalable AI/ML systems and leading GenAI initiatives. Based in Belfast.</p>
+                <div class="hero-actions">
+                    <a href="#projects" class="btn btn-primary">View Projects</a>
+                    <a href="#contact" class="btn btn-outline">Get in Touch</a>
+                </div>
+                <div class="hero-socials">
+                    <a href="https://github.com/connormcilwain" target="_blank" rel="noopener" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="https://www.linkedin.com/in/wc-mcilwain/" target="_blank" rel="noopener" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="mailto:connor.mcilwain@live.co.uk" title="Email"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== WORK HISTORY ===== -->
+    <section id="work" class="section">
+        <div class="container">
+            <h2 class="section-title"><span class="gradient-text">Work</span> History</h2>
+            <div class="timeline">
+
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3>MLOps Software Engineer</h3>
+                                <p class="company">Liberty IT &middot; Belfast</p>
+                            </div>
+                            <span class="badge badge-active">Sept 2024 &ndash; Present</span>
+                        </div>
+                        <ul class="card-list">
+                            <li>Developed and maintained high-throughput Python-based ML-enabled Flask APIs processing millions of monthly requests</li>
+                            <li>Reduced latency on scikit-learn model pipeline operations by ~40% via Python refactoring, ensuring p99 latency falls within SLA</li>
+                            <li>Designed and implemented reusable CI/CD pipelines (Bamboo, GitHub Actions) adopted across multiple applications</li>
+                            <li>Owned application-level observability — built Datadog dashboards and alerts to proactively detect failures and accelerate incident response</li>
+                            <li>Mentored and coached two junior engineers, supporting their technical development and day-to-day delivery</li>
+                            <li>Contributed new features to inner-source Python utility libraries; adhered to enterprise standards (PEP 8, type hinting, unit testing)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3>R&amp;D Machine Learning Engineer</h3>
+                                <p class="company">Allstate Northern Ireland &middot; Belfast</p>
+                            </div>
+                            <span class="badge">Jul 2021 &ndash; Sept 2024</span>
+                        </div>
+                        <ul class="card-list">
+                            <li>Built and deployed a Flask ML web app for legal document prediction, recognised as <strong>Digital DNA's 2023 Digital Innovation Product of the Year</strong></li>
+                            <li>Shipped a GenAI document summarisation and information extraction tool using LangChain, OpenAI APIs, and AWS Textract/S3</li>
+                            <li>Deployed and operated open-source LLMs in production via AWS SageMaker and on-premise infrastructure</li>
+                            <li>Contributed guardrails PoC to restrict prohibited LLM usage and a RAG PoC using ChromaDB and internal open-source LLMs</li>
+                            <li>Trained and deployed time-series models on customer clickstream data, including optimisation for in-browser inference</li>
+                            <li>Facilitated a company-wide GenAI hackathon with 400+ participants, providing technical guidance and automated onboarding tooling</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h3>Apprentice IT Service Desk Analyst</h3>
+                                <p class="company">Allen &amp; Overy LLP &middot; Belfast</p>
+                            </div>
+                            <span class="badge">2015 &ndash; 2017</span>
+                        </div>
+                        <ul class="card-list">
+                            <li>Provided first-line IT support using ServiceNow and TeamViewer</li>
+                            <li>Configured mobile devices and laptops to meet security policy requirements</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== PROJECTS ===== -->
+    <section id="projects" class="section section-alt">
+        <div class="container">
+            <h2 class="section-title"><span class="gradient-text">Projects</span></h2>
+            <div class="projects-grid">
+
+                <div class="project-card">
+                    <div class="project-card-top">
+                        <i class="fas fa-satellite-dish project-icon"></i>
+                        <div class="project-links">
+                            <a href="ufo.html" title="Live Demo"><i class="fas fa-arrow-up-right-from-square"></i></a>
+                        </div>
+                    </div>
+                    <h3>UFO Sightings — Exploratory Analysis</h3>
+                    <p>End-to-end EDA of ~141K NUFORC civilian sighting reports (1947–2023). Covers temporal trends, per-capita geography, shape × time-of-day patterns, semantic clustering of report text, and outlier detection.</p>
+                    <div class="tech-tags">
+                        <span>Python</span>
+                        <span>Pandas</span>
+                        <span>Plotly</span>
+                        <span>NLP</span>
+                        <span>scikit-learn</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-card-top">
+                        <i class="fas fa-folder-open project-icon"></i>
+                        <div class="project-links">
+                            <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                            <a href="#" title="Live Demo"><i class="fas fa-arrow-up-right-from-square"></i></a>
+                        </div>
+                    </div>
+                    <h3>Project Title</h3>
+                    <p>A short description of what this project does and the problem it solves. Replace with your real project details.</p>
+                    <div class="tech-tags">
+                        <span>Python</span>
+                        <span>scikit-learn</span>
+                        <span>Docker</span>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-card-top">
+                        <i class="fas fa-folder-open project-icon"></i>
+                        <div class="project-links">
+                            <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                            <a href="#" title="Live Demo"><i class="fas fa-arrow-up-right-from-square"></i></a>
+                        </div>
+                    </div>
+                    <h3>Project Title</h3>
+                    <p>A short description of what this project does and the problem it solves. Replace with your real project details.</p>
+                    <div class="tech-tags">
+                        <span>Python</span>
+                        <span>TensorFlow</span>
+                        <span>AWS</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SKILLS ===== -->
+    <section id="skills" class="section">
+        <div class="container">
+            <h2 class="section-title"><span class="gradient-text">Skills</span></h2>
+            <div class="skills-groups">
+
+                <div class="skill-group">
+                    <h3 class="skill-group-title">Python & Data Engineering</h3>
+                    <div class="skill-tags">
+                        <span>Python</span>
+                        <span>numpy</span>
+                        <span>pandas</span>
+                        <span>scikit-learn</span>
+                        <span>Flask</span>
+                        <span>FastAPI</span>
+                        <span>SQLAlchemy</span>
+                        <span>Spark</span>
+                        <span>pytest</span>
+                        <span>Data Visualization</span>
+                        <span>Parallel Computing</span>
+                    </div>
+                </div>
+
+                <div class="skill-group">
+                    <h3 class="skill-group-title">Machine Learning & AI</h3>
+                    <div class="skill-tags">
+                        <span>Deep Learning</span>
+                        <span>Keras</span>
+                        <span>PyTorch</span>
+                        <span>LLM Deployment</span>
+                        <span>RAG</span>
+                        <span>LoRA / PEFT</span>
+                        <span>NLP</span>
+                        <span>Time Series</span>
+                        <span>Gradient Boosting</span>
+                        <span>Transfer Learning</span>
+                        <span>Audio Processing</span>
+                    </div>
+                </div>
+
+                <div class="skill-group">
+                    <h3 class="skill-group-title">Cloud & MLOps</h3>
+                    <div class="skill-tags">
+                        <span>AWS SageMaker</span>
+                        <span>AWS S3 / Textract</span>
+                        <span>Azure OpenAI</span>
+                        <span>Docker</span>
+                        <span>Terraform</span>
+                        <span>GitHub Actions</span>
+                        <span>Databricks</span>
+                        <span>CI/CD</span>
+                        <span>Linux</span>
+                        <span>Datadog</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== EDUCATION ===== -->
+    <section id="education" class="section section-alt">
+        <div class="container">
+            <h2 class="section-title"><span class="gradient-text">Education</span></h2>
+            <div class="edu-grid">
+
+                <div class="card edu-card">
+                    <i class="fas fa-graduation-cap edu-icon"></i>
+                    <div>
+                        <h3>PGCert Artificial Intelligence <span class="badge" style="font-size:10px;vertical-align:middle;">Distinction</span></h3>
+                        <p class="company">University of Ulster &middot; Belfast</p>
+                        <p class="date">2022 &ndash; 2023</p>
+                    </div>
+                </div>
+
+                <div class="card edu-card">
+                    <i class="fas fa-atom edu-icon"></i>
+                    <div>
+                        <h3>BSc Physics <span class="badge" style="font-size:10px;vertical-align:middle;">1st Class Honours</span></h3>
+                        <p class="company">Queen's University Belfast</p>
+                        <p class="date">2018 &ndash; 2021</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <h3 class="subsection-title">Certificates</h3>
+            <div class="cert-list">
+                <span class="cert-badge"><i class="fas fa-certificate"></i> MTA Security Fundamentals</span>
+                <span class="cert-badge"><i class="fas fa-certificate"></i> MTA Networking Fundamentals</span>
+                <span class="cert-badge"><i class="fas fa-certificate"></i> MTA Windows Fundamentals</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== ACCOLADES ===== -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title"><span class="gradient-text">Accolades</span></h2>
+            <div class="award-card">
+                <div class="award-icon"><i class="fas fa-trophy"></i></div>
+                <div class="award-body">
+                    <h3>Digital DNA Digital Innovation Product of the Year &ndash; 2023</h3>
+                    <p>Recognised as a contributing member of the development team behind an award-winning ML-powered legal document automation platform, selected from entrants across Northern Ireland's tech industry.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CONTACT ===== -->
+    <section id="contact" class="section">
+        <div class="container contact-container">
+            <h2 class="section-title"><span class="gradient-text">Get In Touch</span></h2>
+            <p class="contact-sub">Open to new opportunities, collaborations, or just a chat about ML. Drop me a message.</p>
+            <a href="mailto:connor.mcilwain@live.co.uk" class="btn btn-primary btn-large">
+                <i class="fas fa-envelope"></i> Say Hello
+            </a>
+            <div class="contact-socials">
+                <a href="https://github.com/connormcilwain" target="_blank" rel="noopener">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="https://www.linkedin.com/in/wc-mcilwain/" target="_blank" rel="noopener">
+                    <i class="fab fa-linkedin"></i> LinkedIn
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <p>Designed &amp; built by Connor McIlwain</p>
+    </footer>
+
+</body>
+</html>
