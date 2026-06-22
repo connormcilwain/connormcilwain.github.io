@@ -7888,12 +7888,17 @@ a.anchor-link {
     background: transparent !important;
     border: none !important; box-shadow: none !important; padding: 0 !important;
   }
-  .jp-RenderedMarkdown table { border-collapse: collapse; width: 100%; background: transparent !important; color: #c9d1d9 !important; }
-  .jp-RenderedMarkdown th { background: rgba(33,38,64,0.5) !important; color: #e6edf3 !important; font-weight: 600; padding: 0.5rem 1rem; border: 1px solid #30363d !important; }
-  .jp-RenderedMarkdown td { background: transparent !important; color: #8b949e !important; padding: 0.4rem 1rem; border: 1px solid rgba(33,38,64,0.38) !important; }
-  .jp-RenderedMarkdown tr:hover td { background: rgba(22,27,34,0.5) !important; color: #c9d1d9 !important; }
-  .jp-RenderedMarkdown tr:nth-child(even) td,
-  .jp-RenderedMarkdown tr:nth-child(odd) td { background: transparent !important; }
+  .jp-RenderedMarkdown table { border-collapse: collapse; width: 100%; background: transparent !important; color: #c9d1d9 !important; border: 1px solid rgba(48,54,61,0.5) !important; border-radius: 8px; overflow: hidden; }
+  .jp-RenderedMarkdown thead tr,
+  .jp-RenderedMarkdown th { background: rgba(33,38,64,0.35) !important; color: #cdd6e0 !important; font-weight: 600; padding: 0.55rem 1rem; border: none !important; border-bottom: 1px solid rgba(48,54,61,0.6) !important; text-align: left; }
+  .jp-RenderedMarkdown td { background: transparent !important; color: #8b949e !important; padding: 0.5rem 1rem; border: none !important; }
+  /* override Jupyter's own row striping (lives on the <tr>, not the <td>) */
+  .jp-RenderedMarkdown tbody tr,
+  .jp-RenderedMarkdown tbody tr:nth-child(2n),
+  .jp-RenderedMarkdown tbody tr:nth-child(odd) { background: transparent !important; }
+  .jp-RenderedMarkdown tbody tr:nth-child(2n) { background: rgba(255,255,255,0.018) !important; }
+  .jp-RenderedMarkdown tbody tr:hover { background: rgba(88,166,255,0.06) !important; }
+  .jp-RenderedMarkdown tbody tr:hover td { color: #c9d1d9 !important; }
   ::-webkit-scrollbar { width: 8px; }
   ::-webkit-scrollbar-track { background: #0d1117; }
   ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
