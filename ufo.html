@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html lang="en">
 <head><meta charset="utf-8"/>
@@ -8643,26 +8643,36 @@ logs, NUFORC editorial notes, and a small set of unusually detailed first-person
 </div>
 </main>
 <script>
-  window.addEventListener('load', function() {
-    document.querySelectorAll('.plotly-graph-div').forEach(function(p) {
-      if (!p._fullLayout) return;
-      Plotly.relayout(p, {
-        paper_bgcolor: '#161b22',
-        plot_bgcolor: '#0d1117',
-        font: { color: '#c9d1d9', family: 'Inter, Segoe UI, system-ui, sans-serif' },
-        'xaxis.gridcolor': 'rgba(33,38,64,0.53)',
-        'yaxis.gridcolor': 'rgba(33,38,64,0.53)',
-        'xaxis.linecolor': '#30363d',
-        'yaxis.linecolor': '#30363d',
-        'xaxis.tickfont.color': '#8b949e',
-        'yaxis.tickfont.color': '#8b949e',
-        'xaxis.title.font.color': '#c9d1d9',
-        'yaxis.title.font.color': '#c9d1d9',
-        'title.font.color': '#e6edf3',
-        'title.font.size': 16
+  (function() {
+    var LAYOUT = {
+      paper_bgcolor: '#161b22',
+      plot_bgcolor: '#0d1117',
+      font: { color: '#c9d1d9', family: 'Inter, Segoe UI, system-ui, sans-serif' },
+      'xaxis.gridcolor': 'rgba(33,38,64,0.53)',
+      'yaxis.gridcolor': 'rgba(33,38,64,0.53)',
+      'xaxis.linecolor': '#30363d',
+      'yaxis.linecolor': '#30363d',
+      'xaxis.tickfont.color': '#8b949e',
+      'yaxis.tickfont.color': '#8b949e',
+      'xaxis.title.font.color': '#c9d1d9',
+      'yaxis.title.font.color': '#c9d1d9',
+      'title.font.color': '#e6edf3',
+      'title.font.size': 16
+    };
+    function relayout() {
+      var updated = 0;
+      document.querySelectorAll('.plotly-graph-div').forEach(function(p) {
+        if (p._fullLayout) { Plotly.relayout(p, LAYOUT); updated++; }
       });
-    });
-  });
+      return updated;
+    }
+    var attempts = 0;
+    var iv = setInterval(function() {
+      var n = relayout();
+      attempts++;
+      if (n >= 10 || attempts > 40) clearInterval(iv);
+    }, 400);
+  })();
 </script>
 </body>
 </html>
