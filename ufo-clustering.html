@@ -1,0 +1,607 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UFO Sightings - Technical Methods</title>
+  <meta name="description" content="Technical writeup for an unsupervised learning pipeline over 141k NUFORC UFO reports.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    :root {
+      --bg: #080b10;
+      --panel: #111827;
+      --panel-2: #151c2a;
+      --ink: #ecfdf5;
+      --muted: #a8b3c5;
+      --soft: #6b7280;
+      --line: rgba(148, 163, 184, 0.22);
+      --green: #00ffaa;
+      --cyan: #40c9ff;
+      --pink: #ff2d78;
+      --gold: #ffc857;
+      --purple: #b388ff;
+      --shadow: 0 18px 50px rgba(0, 0, 0, 0.32);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      background:
+        radial-gradient(circle at 18% 0%, rgba(0, 255, 170, 0.12), transparent 26rem),
+        radial-gradient(circle at 88% 10%, rgba(255, 45, 120, 0.10), transparent 24rem),
+        linear-gradient(180deg, #080b10 0%, #0c111b 44%, #080b10 100%);
+    }
+
+    a { color: inherit; }
+
+    .shell {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--line);
+      background: rgba(8, 11, 16, 0.86);
+      backdrop-filter: blur(16px);
+    }
+
+    .topbar .shell {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 64px;
+      gap: 16px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .brand i { color: var(--green); }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      font-size: 0.92rem;
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      padding: 8px 10px;
+      border-radius: 6px;
+    }
+
+    nav a:hover {
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .hero {
+      padding: 72px 0 36px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--green);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 930px;
+      font-size: clamp(2.35rem, 6vw, 4.9rem);
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+
+    .lede {
+      max-width: 860px;
+      margin: 24px 0 0;
+      color: var(--muted);
+      font-size: clamp(1.05rem, 2vw, 1.28rem);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      min-height: 44px;
+      padding: 10px 14px;
+      border-radius: 7px;
+      border: 1px solid var(--line);
+      text-decoration: none;
+      font-weight: 700;
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.055);
+    }
+
+    .button.primary {
+      color: #03120c;
+      background: var(--green);
+      border-color: transparent;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      margin-top: 42px;
+      border: 1px solid var(--line);
+      background: var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .metric {
+      min-height: 116px;
+      padding: 20px;
+      background: rgba(17, 24, 39, 0.88);
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 1.55rem;
+      line-height: 1.1;
+      color: var(--ink);
+    }
+
+    .metric span {
+      display: block;
+      color: var(--muted);
+      margin-top: 8px;
+      font-size: 0.95rem;
+    }
+
+    main {
+      padding: 38px 0 70px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 42px;
+      align-items: start;
+    }
+
+    .toc {
+      position: sticky;
+      top: 86px;
+      padding: 18px 0;
+      border-right: 1px solid var(--line);
+    }
+
+    .toc h2 {
+      margin: 0 0 12px;
+      color: var(--soft);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .toc a {
+      display: block;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 7px 14px 7px 0;
+      font-size: 0.92rem;
+    }
+
+    .toc a:hover { color: var(--green); }
+
+    section {
+      padding: 34px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    section:first-child { padding-top: 4px; }
+
+    h2 {
+      margin: 0 0 15px;
+      font-size: clamp(1.55rem, 3vw, 2.3rem);
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 28px 0 10px;
+      font-size: 1.05rem;
+      color: var(--green);
+      letter-spacing: 0;
+    }
+
+    p { margin: 0 0 16px; color: var(--muted); }
+
+    .callout {
+      margin: 24px 0;
+      padding: 18px 20px;
+      border-left: 3px solid var(--green);
+      background: rgba(0, 255, 170, 0.07);
+      color: var(--ink);
+      border-radius: 0 7px 7px 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin: 22px 0;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(17, 24, 39, 0.74);
+      padding: 18px;
+    }
+
+    .panel h3 {
+      margin-top: 0;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .pipeline {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin: 24px 0;
+    }
+
+    .pipe-step {
+      min-height: 118px;
+      padding: 16px 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(21, 28, 42, 0.96), rgba(10, 15, 23, 0.96));
+    }
+
+    .pipe-step b {
+      display: block;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+
+    .pipe-step span {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 22px 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th, td {
+      text-align: left;
+      vertical-align: top;
+      padding: 13px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    th {
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.07);
+      font-size: 0.92rem;
+    }
+
+    td { color: var(--muted); }
+
+    tr:last-child td { border-bottom: 0; }
+
+    pre {
+      margin: 18px 0;
+      padding: 18px;
+      overflow-x: auto;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #05070b;
+      color: #d8fdf0;
+      font-family: "JetBrains Mono", Consolas, monospace;
+      font-size: 0.9rem;
+      line-height: 1.55;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 18px 0 0;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 5px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      background: rgba(255,255,255,0.04);
+      font-size: 0.86rem;
+      font-weight: 600;
+    }
+
+    .source-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .source-list div {
+      padding: 14px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.045);
+    }
+
+    .source-list b {
+      display: block;
+      color: var(--ink);
+      margin-bottom: 5px;
+    }
+
+    footer {
+      padding: 34px 0 48px;
+      color: var(--soft);
+      border-top: 1px solid var(--line);
+    }
+
+    @media (max-width: 900px) {
+      .metrics, .pipeline, .grid, .source-list {
+        grid-template-columns: 1fr;
+      }
+
+      .layout {
+        display: block;
+      }
+
+      .toc {
+        position: static;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+        margin-bottom: 24px;
+      }
+
+      .topbar .shell {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 12px 0;
+      }
+
+      nav { justify-content: flex-start; }
+      .hero { padding-top: 46px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell">
+      <a class="brand" href="index.html"><i class="fa-solid fa-satellite-dish"></i> Connor McIlwain</a>
+      <nav aria-label="Project navigation">
+        <a href="ufo.html">Exploratory analysis</a>
+        <a href="#pipeline">Pipeline</a>
+        <a href="#bayesian">Bayesian tuning</a>
+        <a href="#publish">Sources</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="hero">
+    <div class="shell">
+      <div class="eyebrow"><i class="fa-solid fa-diagram-project"></i> Technical case study</div>
+      <h1>Clustering UFO sightings with NLP, UMAP, and Bayesian-tuned DBSCAN</h1>
+      <p class="lede">A coherent methods writeup for the UFO sightings project: how messy NUFORC reports become semantic features, structured signals, density clusters, outlier groups, and human-readable cluster profiles.</p>
+      <div class="hero-actions">
+        <a class="button primary" href="ufo.html"><i class="fa-solid fa-chart-line"></i> View exploratory analysis</a>
+        <a class="button" href="#bayesian"><i class="fa-solid fa-sliders"></i> Jump to tuning method</a>
+      </div>
+      <div class="metrics" aria-label="Project summary metrics">
+        <div class="metric"><strong>~141k</strong><span>NUFORC civilian sighting reports</span></div>
+        <div class="metric"><strong>1969-2022</strong><span>core dated analysis window</span></div>
+        <div class="metric"><strong>8 notebooks</strong><span>consolidated into one narrative</span></div>
+        <div class="metric"><strong>7 stages</strong><span>from text cleaning to cluster profiling</span></div>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <div class="shell layout">
+      <aside class="toc">
+        <h2>Contents</h2>
+        <a href="#frame">1. Framing</a>
+        <a href="#text">2. Text features</a>
+        <a href="#embeddings">3. Embeddings</a>
+        <a href="#features">4. Feature engineering</a>
+        <a href="#pipeline">5. Reduction pipeline</a>
+        <a href="#bayesian">6. Bayesian tuning</a>
+        <a href="#profiles">7. Cluster profiles</a>
+        <a href="#limits">8. Limits and next steps</a>
+      </aside>
+
+      <article>
+        <section id="frame">
+          <h2>1. From sightings to a modelling problem</h2>
+          <p>The raw material is not laboratory data. It is civilian reporting: short summaries, longer descriptions, dates, locations, shapes, durations, and NUFORC editorial metadata. That makes the modelling question deliberately careful.</p>
+          <div class="callout">The goal is not to prove what happened in the sky. The goal is to understand how people report anomalous observations at scale.</div>
+          <table>
+            <thead><tr><th>Signal</th><th>Fields</th><th>Use in the project</th></tr></thead>
+            <tbody>
+              <tr><td>Text</td><td><code>summary</code>, <code>text</code></td><td>Semantic maps, topic features, outlier language.</td></tr>
+              <tr><td>Location</td><td><code>country</code>, <code>state</code>, geocoded city coordinates</td><td>Per-capita maps and spatial clustering features.</td></tr>
+              <tr><td>Time</td><td><code>date_time</code>, <code>posted</code></td><td>Cultural spikes, seasonality, hour-of-day effects.</td></tr>
+              <tr><td>Description</td><td><code>shape</code>, <code>duration</code></td><td>Observable metadata for cluster profiles.</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="text">
+          <h2>2. Text cleaning and topic features</h2>
+          <p>The topic-modelling notebooks showed a useful failure mode: naive topic models are dominated by words like <code>light</code>, <code>bright</code>, and <code>sky</code>. Those words describe the whole corpus, so they are weak at separating one kind of report from another.</p>
+          <div class="grid">
+            <div class="panel"><h3><i class="fa-solid fa-filter"></i> Cleaning</h3><p>Normalize text, remove high-frequency sighting vocabulary, test unigrams and n-grams, and keep topic features that survive incidence filtering.</p></div>
+            <div class="panel"><h3><i class="fa-solid fa-layer-group"></i> Topic models</h3><p>LDA acts as an interpretable baseline. HDP is the stronger fit for exploration because it does not force a fixed number of topics upfront.</p></div>
+          </div>
+          <p>The output of this stage is the bridge artifact: <code>features_and_topics.pickle</code>, used by the clustering notebooks as the structured-plus-semantic feature source.</p>
+        </section>
+
+        <section id="embeddings">
+          <h2>3. Semantic embeddings</h2>
+          <p>BERT-style embeddings complement topic models. Topic models capture recurring word groups; embeddings capture semantic similarity even when witnesses use different wording.</p>
+          <div class="pipeline">
+            <div class="pipe-step"><b>Clean summaries</b><span>Remove obvious noise while preserving report language.</span></div>
+            <div class="pipe-step"><b>DistilBERT</b><span>Convert each report summary into a dense vector.</span></div>
+            <div class="pipe-step"><b>Cache vectors</b><span>Store embeddings so the slow step is reproducible.</span></div>
+            <div class="pipe-step"><b>UMAP</b><span>Project semantic space into two dimensions.</span></div>
+            <div class="pipe-step"><b>Inspect</b><span>Read snippets from dense regions and outliers.</span></div>
+          </div>
+          <p>The exploratory page uses this to reveal neighborhoods: ordinary light reports, structured craft descriptions, MADAR node logs, editorial notes, and more unusual narrative accounts.</p>
+        </section>
+
+        <section id="features">
+          <h2>4. Structured feature engineering</h2>
+          <p>The final clustering model combines text-derived features with structured signals from place, time, shape, and duration.</p>
+          <table>
+            <thead><tr><th>Feature family</th><th>Engineering</th><th>Reason</th></tr></thead>
+            <tbody>
+              <tr><td>Location</td><td>Latitude/longitude quantile bins; rare state/country categories collapsed.</td><td>Keeps coarse and regional spatial signal without over-weighting raw coordinates.</td></tr>
+              <tr><td>Time</td><td>Year, month, hour, day-of-week, season.</td><td>Captures cultural era and observation conditions.</td></tr>
+              <tr><td>Cyclic time</td><td>Sine/cosine encodings for hour and day-of-week.</td><td>Makes midnight and 23:00 neighbors in distance space.</td></tr>
+              <tr><td>Duration</td><td>Fuzzy parse free-text durations into seconds; log transform.</td><td>Turns messy strings into a comparable numeric feature.</td></tr>
+              <tr><td>Topics</td><td>HDP/LDA topic columns filtered by incidence.</td><td>Adds semantic information without exploding dimensionality.</td></tr>
+            </tbody>
+          </table>
+          <pre><code>def encode_cyclic_hour(hour):
+    angle = 2 * np.pi * hour / 24
+    return np.sin(angle), np.cos(angle)
+
+# 23:00 and 00:00 become neighbors on the unit circle,
+# instead of sitting 23 numeric units apart.</code></pre>
+        </section>
+
+        <section id="pipeline">
+          <h2>5. Dimensionality reduction before clustering</h2>
+          <p>DBSCAN is distance-based, and high-dimensional sparse features make distance thresholds brittle. The clustering experiments compare PCA, FastICA, and UMAP before fitting density clusters.</p>
+          <div class="grid">
+            <div class="panel"><h3><i class="fa-solid fa-ruler-combined"></i> PCA</h3><p>A disciplined linear baseline that preserves global variance.</p></div>
+            <div class="panel"><h3><i class="fa-solid fa-wave-square"></i> FastICA</h3><p>A baseline for non-Gaussian independent components.</p></div>
+            <div class="panel"><h3><i class="fa-solid fa-share-nodes"></i> UMAP</h3><p>The most useful public view because it preserves local neighborhoods and makes clusters inspectable.</p></div>
+            <div class="panel"><h3><i class="fa-solid fa-circle-nodes"></i> DBSCAN</h3><p>Finds dense groups while leaving unusual reports as noise rather than forcing every report into a class.</p></div>
+          </div>
+        </section>
+
+        <section id="bayesian">
+          <h2>6. Bayesian hyperparameter tuning</h2>
+          <p>DBSCAN has two sensitive knobs: <code>eps</code>, the neighborhood radius, and <code>min_samples</code>, the density threshold. A grid search wastes trials because most combinations produce all noise, one giant cluster, or many tiny fragments.</p>
+          <p>Bayesian optimization is a better fit: it uses the history of previous trials to choose more promising parameters, while the objective function rejects degenerate clusterings.</p>
+          <pre><code>def score_dbscan(labels, X):
+    n_clusters = count_non_noise_clusters(labels)
+    noise_share = np.mean(labels == -1)
+
+    if n_clusters &lt; 2 or noise_share &gt; 0.80:
+        return penalty
+
+    return silhouette_score(X[labels != -1], labels[labels != -1])</code></pre>
+          <table>
+            <thead><tr><th>Criterion</th><th>Why it matters</th></tr></thead>
+            <tbody>
+              <tr><td>Silhouette score</td><td>Rewards compact, separated clusters.</td></tr>
+              <tr><td>Cluster-count guardrail</td><td>Rejects one-cluster and too-many-fragment solutions.</td></tr>
+              <tr><td>Noise-share guardrail</td><td>Keeps outliers useful without letting them swallow the dataset.</td></tr>
+              <tr><td>Interpretability</td><td>Prefers models that can be explained with profiles and examples.</td></tr>
+            </tbody>
+          </table>
+          <div class="callout">This is the technical centerpiece: the project shows judgement about unsupervised learning, not just library usage.</div>
+        </section>
+
+        <section id="profiles">
+          <h2>7. Turning clusters into readable profiles</h2>
+          <p>The final interpretability layer is delta-variance profiling. For each cluster, compare feature behavior inside the group to the whole dataset. The largest differences become the cluster fingerprint.</p>
+          <table>
+            <thead><tr><th>Readable label</th><th>Evidence to use</th></tr></thead>
+            <tbody>
+              <tr><td>Recent light/orb reports</td><td>Shape distribution, year distribution, summary snippets.</td></tr>
+              <tr><td>Structured craft descriptions</td><td>Disk/cigar/triangle shape rates, daytime signal, representative text.</td></tr>
+              <tr><td>MADAR or instrument logs</td><td>Topic terms, short automated summaries, outlier status.</td></tr>
+              <tr><td>Editorial or low-confidence reports</td><td>NUFORC note language, <code>HOAX??</code>, unusual source markers.</td></tr>
+            </tbody>
+          </table>
+          <p>This keeps the clusters honest: a label only earns its place if the feature profile and real snippets agree.</p>
+        </section>
+
+        <section id="limits">
+          <h2>8. Limitations and next steps</h2>
+          <p>The analysis is intentionally careful. NUFORC reports are self-submitted and culturally mediated. Reporting volume reflects access, attention, and ease of submission. Topic models and embeddings discover language patterns, not ground truth.</p>
+          <div class="source-list" id="publish">
+            <div><b>Public overview</b><span><code>UFO_Analysis.ipynb</code> -> <code>ufo.html</code></span></div>
+            <div><b>Technical writeup</b><span><code>UFO_Technical_Methods.ipynb</code> -> <code>ufo-clustering.html</code></span></div>
+            <div><b>Source notebooks</b><span><code>BERT_embeddings</code>, topic modelling, clustering experiments.</span></div>
+            <div><b>Future upgrades</b><span>HDBSCAN, LLM-assisted cluster labels, reproducible feature pipeline.</span></div>
+          </div>
+          <div class="tag-row" aria-label="Technologies used">
+            <span class="tag">Python</span>
+            <span class="tag">Pandas</span>
+            <span class="tag">DistilBERT</span>
+            <span class="tag">HDP / LDA</span>
+            <span class="tag">UMAP</span>
+            <span class="tag">DBSCAN</span>
+            <span class="tag">Bayesian optimization</span>
+            <span class="tag">Plotly</span>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer>
+    <div class="shell">
+      <a class="button" href="ufo.html"><i class="fa-solid fa-arrow-left"></i> Back to exploratory analysis</a>
+    </div>
+  </footer>
+</body>
+</html>
