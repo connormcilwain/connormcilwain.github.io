@@ -7861,6 +7861,10 @@ a.anchor-link {
   .jp-OutputArea,
   .jp-OutputArea-output { background: transparent !important; }
   .plotly-graph-div { border-radius: 8px; overflow: hidden; }
+  /* Bulletproof: force Plotly's plot-area background dark regardless of JS.
+     The paper + plot-area rects live under <g class="bglayer">; annotation
+     label boxes also use class "bg" so we scope to .bglayer to avoid them. */
+  .plotly-graph-div .bglayer .bg { fill: #161b22 !important; }
   #cell-id\=0b9325dd {
     background: linear-gradient(135deg, #161b22 0%, #0d1117 100%) !important;
     border: 1px solid #21c997 !important;
