@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>UFO Sightings - Technical Methods</title>
-  <meta name="description" content="Technical writeup for an unsupervised learning pipeline over 141k NUFORC UFO reports.">
+  <title>UFO Sightings - Technical Methods and Results</title>
+  <meta name="description" content="Methods and results for an unsupervised learning pipeline over 141k NUFORC UFO reports.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -28,10 +28,7 @@
 
     * { box-sizing: border-box; }
 
-    html {
-      scroll-behavior: smooth;
-      background: var(--bg);
-    }
+    html { scroll-behavior: smooth; background: var(--bg); }
 
     body {
       margin: 0;
@@ -45,18 +42,16 @@
     }
 
     a { color: inherit; }
+    code { font-family: "JetBrains Mono", Consolas, monospace; color: #d8fdf0; }
 
-    .shell {
-      width: min(1120px, calc(100% - 32px));
-      margin: 0 auto;
-    }
+    .shell { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
 
     .topbar {
       position: sticky;
       top: 0;
       z-index: 20;
       border-bottom: 1px solid var(--line);
-      background: rgba(8, 11, 16, 0.86);
+      background: rgba(8, 11, 16, 0.88);
       backdrop-filter: blur(16px);
     }
 
@@ -95,10 +90,7 @@
       border-radius: 6px;
     }
 
-    nav a:hover {
-      color: var(--ink);
-      background: rgba(255, 255, 255, 0.06);
-    }
+    nav a:hover { color: var(--ink); background: rgba(255, 255, 255, 0.06); }
 
     .hero {
       padding: 72px 0 36px;
@@ -119,14 +111,14 @@
 
     h1 {
       margin: 0;
-      max-width: 930px;
-      font-size: clamp(2.35rem, 6vw, 4.9rem);
+      max-width: 960px;
+      font-size: clamp(2.35rem, 6vw, 4.85rem);
       line-height: 0.98;
       letter-spacing: 0;
     }
 
     .lede {
-      max-width: 860px;
+      max-width: 870px;
       margin: 24px 0 0;
       color: var(--muted);
       font-size: clamp(1.05rem, 2vw, 1.28rem);
@@ -153,11 +145,7 @@
       background: rgba(255, 255, 255, 0.055);
     }
 
-    .button.primary {
-      color: #03120c;
-      background: var(--green);
-      border-color: transparent;
-    }
+    .button.primary { color: #03120c; background: var(--green); border-color: transparent; }
 
     .metrics {
       display: grid;
@@ -177,23 +165,10 @@
       background: rgba(17, 24, 39, 0.88);
     }
 
-    .metric strong {
-      display: block;
-      font-size: 1.55rem;
-      line-height: 1.1;
-      color: var(--ink);
-    }
+    .metric strong { display: block; font-size: 1.55rem; line-height: 1.1; color: var(--ink); }
+    .metric span { display: block; color: var(--muted); margin-top: 8px; font-size: 0.95rem; }
 
-    .metric span {
-      display: block;
-      color: var(--muted);
-      margin-top: 8px;
-      font-size: 0.95rem;
-    }
-
-    main {
-      padding: 38px 0 70px;
-    }
+    main { padding: 38px 0 70px; }
 
     .layout {
       display: grid;
@@ -259,6 +234,16 @@
       border-radius: 0 7px 7px 0;
     }
 
+    .result {
+      margin: 20px 0;
+      padding: 16px 18px;
+      border: 1px solid rgba(64, 201, 255, 0.34);
+      background: rgba(64, 201, 255, 0.08);
+      border-radius: 8px;
+    }
+
+    .result b { color: var(--cyan); }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -295,17 +280,8 @@
       background: linear-gradient(180deg, rgba(21, 28, 42, 0.96), rgba(10, 15, 23, 0.96));
     }
 
-    .pipe-step b {
-      display: block;
-      color: var(--ink);
-      margin-bottom: 8px;
-    }
-
-    .pipe-step span {
-      color: var(--muted);
-      font-size: 0.9rem;
-      line-height: 1.45;
-    }
+    .pipe-step b { display: block; color: var(--ink); margin-bottom: 8px; }
+    .pipe-step span { color: var(--muted); font-size: 0.9rem; line-height: 1.45; }
 
     table {
       width: 100%;
@@ -330,7 +306,6 @@
     }
 
     td { color: var(--muted); }
-
     tr:last-child td { border-bottom: 0; }
 
     pre {
@@ -366,26 +341,6 @@
       font-weight: 600;
     }
 
-    .source-list {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 18px;
-    }
-
-    .source-list div {
-      padding: 14px 16px;
-      border-radius: 8px;
-      border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.045);
-    }
-
-    .source-list b {
-      display: block;
-      color: var(--ink);
-      margin-bottom: 5px;
-    }
-
     footer {
       padding: 34px 0 48px;
       color: var(--soft);
@@ -393,27 +348,19 @@
     }
 
     @media (max-width: 900px) {
-      .metrics, .pipeline, .grid, .source-list {
-        grid-template-columns: 1fr;
-      }
-
-      .layout {
-        display: block;
-      }
-
+      .metrics, .pipeline, .grid { grid-template-columns: 1fr; }
+      .layout { display: block; }
       .toc {
         position: static;
         border-right: 0;
         border-bottom: 1px solid var(--line);
         margin-bottom: 24px;
       }
-
       .topbar .shell {
         align-items: flex-start;
         flex-direction: column;
         padding: 12px 0;
       }
-
       nav { justify-content: flex-start; }
       .hero { padding-top: 46px; }
     }
@@ -425,27 +372,27 @@
       <a class="brand" href="index.html"><i class="fa-solid fa-satellite-dish"></i> Connor McIlwain</a>
       <nav aria-label="Project navigation">
         <a href="ufo.html">Exploratory analysis</a>
-        <a href="#pipeline">Pipeline</a>
+        <a href="#results">Results</a>
+        <a href="#code">Code</a>
         <a href="#bayesian">Bayesian tuning</a>
-        <a href="#publish">Sources</a>
       </nav>
     </div>
   </header>
 
   <div class="hero">
     <div class="shell">
-      <div class="eyebrow"><i class="fa-solid fa-diagram-project"></i> Technical case study</div>
-      <h1>Clustering UFO sightings with NLP, UMAP, and Bayesian-tuned DBSCAN</h1>
-      <p class="lede">A coherent methods writeup for the UFO sightings project: how messy NUFORC reports become semantic features, structured signals, density clusters, outlier groups, and human-readable cluster profiles.</p>
+      <div class="eyebrow"><i class="fa-solid fa-diagram-project"></i> Methods and results</div>
+      <h1>Clustering 141k UFO reports with semantic features and Bayesian-tuned DBSCAN</h1>
+      <p class="lede">This page explains the modelling pipeline behind the UFO sightings analysis: text cleaning, topic features, BERT embeddings, UMAP projections, density clustering, outlier handling, and cluster profiling.</p>
       <div class="hero-actions">
         <a class="button primary" href="ufo.html"><i class="fa-solid fa-chart-line"></i> View exploratory analysis</a>
-        <a class="button" href="#bayesian"><i class="fa-solid fa-sliders"></i> Jump to tuning method</a>
+        <a class="button" href="#bayesian"><i class="fa-solid fa-sliders"></i> Jump to DBSCAN tuning</a>
       </div>
       <div class="metrics" aria-label="Project summary metrics">
-        <div class="metric"><strong>~141k</strong><span>NUFORC civilian sighting reports</span></div>
-        <div class="metric"><strong>1969-2022</strong><span>core dated analysis window</span></div>
-        <div class="metric"><strong>8 notebooks</strong><span>consolidated into one narrative</span></div>
-        <div class="metric"><strong>7 stages</strong><span>from text cleaning to cluster profiling</span></div>
+        <div class="metric"><strong>138,601</strong><span>dated sightings used in the public analysis</span></div>
+        <div class="metric"><strong>115,386</strong><span>reports with geocoded city coordinates</span></div>
+        <div class="metric"><strong>25,000</strong><span>reports sampled for the semantic UMAP view</span></div>
+        <div class="metric"><strong>7</strong><span>unique DBSCAN labels loaded in the cluster-profile section</span></div>
       </div>
     </div>
   </div>
@@ -454,135 +401,216 @@
     <div class="shell layout">
       <aside class="toc">
         <h2>Contents</h2>
-        <a href="#frame">1. Framing</a>
-        <a href="#text">2. Text features</a>
-        <a href="#embeddings">3. Embeddings</a>
-        <a href="#features">4. Feature engineering</a>
-        <a href="#pipeline">5. Reduction pipeline</a>
-        <a href="#bayesian">6. Bayesian tuning</a>
-        <a href="#profiles">7. Cluster profiles</a>
-        <a href="#limits">8. Limits and next steps</a>
+        <a href="#question">1. Question</a>
+        <a href="#data">2. Dataset</a>
+        <a href="#code">3. Feature code</a>
+        <a href="#embeddings">4. Embeddings</a>
+        <a href="#reduction">5. Dimensionality reduction</a>
+        <a href="#bayesian">6. Bayesian DBSCAN</a>
+        <a href="#results">7. Results</a>
+        <a href="#profiles">8. Cluster profiles</a>
+        <a href="#limits">9. Limits</a>
       </aside>
 
       <article>
-        <section id="frame">
-          <h2>1. From sightings to a modelling problem</h2>
-          <p>The raw material is not laboratory data. It is civilian reporting: short summaries, longer descriptions, dates, locations, shapes, durations, and NUFORC editorial metadata. That makes the modelling question deliberately careful.</p>
-          <div class="callout">The goal is not to prove what happened in the sky. The goal is to understand how people report anomalous observations at scale.</div>
+        <section id="question">
+          <h2>1. Modelling question</h2>
+          <p>The project treats UFO reports as a large, messy corpus of human observations. The modelling task is not to decide whether an event happened; it is to find repeatable structure in how witnesses describe sightings.</p>
+          <div class="callout">Useful clusters should be dense in feature space, interpretable in plain English, and grounded in representative report snippets.</div>
+        </section>
+
+        <section id="data">
+          <h2>2. Dataset and usable signal</h2>
+          <p>The raw NUFORC data combines structured fields and free text. The public analysis reports 138,601 dated sightings from 1969-2022, with 426 countries represented. For spatial modelling, the useful subset is smaller: 115,386 reports include geocoded city latitude and longitude.</p>
           <table>
-            <thead><tr><th>Signal</th><th>Fields</th><th>Use in the project</th></tr></thead>
+            <thead><tr><th>Field family</th><th>Examples</th><th>How it enters the model</th></tr></thead>
             <tbody>
-              <tr><td>Text</td><td><code>summary</code>, <code>text</code></td><td>Semantic maps, topic features, outlier language.</td></tr>
-              <tr><td>Location</td><td><code>country</code>, <code>state</code>, geocoded city coordinates</td><td>Per-capita maps and spatial clustering features.</td></tr>
-              <tr><td>Time</td><td><code>date_time</code>, <code>posted</code></td><td>Cultural spikes, seasonality, hour-of-day effects.</td></tr>
-              <tr><td>Description</td><td><code>shape</code>, <code>duration</code></td><td>Observable metadata for cluster profiles.</td></tr>
+              <tr><td>Text</td><td><code>summary</code>, <code>text</code></td><td>Cleaned text, topic features, BERT embeddings, outlier vocabulary.</td></tr>
+              <tr><td>Location</td><td><code>country</code>, <code>state</code>, <code>city_latitude</code>, <code>city_longitude</code></td><td>Spatial bins, rare-category grouping, per-capita context.</td></tr>
+              <tr><td>Time</td><td><code>date_time</code>, year, month, hour, day-of-week</td><td>Trend analysis and cyclic features for clustering.</td></tr>
+              <tr><td>Description</td><td><code>shape</code>, <code>duration</code></td><td>Categorical object label plus parsed/log-transformed duration.</td></tr>
+              <tr><td>Provenance</td><td><code>report_link</code>, <code>stats</code>, NUFORC notes</td><td>Manual inspection of outliers and cluster examples.</td></tr>
             </tbody>
           </table>
+          <div class="result"><b>Observed missingness:</b> the feature-engineered dataset has 141,189 usable summaries, 138,532 parsed datetimes, 115,386 geocoded locations, and 119,418 log-duration values. Rows without geocoded location are dropped for the clustering model because spatial features are central to the profile.</div>
         </section>
 
-        <section id="text">
-          <h2>2. Text cleaning and topic features</h2>
-          <p>The topic-modelling notebooks showed a useful failure mode: naive topic models are dominated by words like <code>light</code>, <code>bright</code>, and <code>sky</code>. Those words describe the whole corpus, so they are weak at separating one kind of report from another.</p>
-          <div class="grid">
-            <div class="panel"><h3><i class="fa-solid fa-filter"></i> Cleaning</h3><p>Normalize text, remove high-frequency sighting vocabulary, test unigrams and n-grams, and keep topic features that survive incidence filtering.</p></div>
-            <div class="panel"><h3><i class="fa-solid fa-layer-group"></i> Topic models</h3><p>LDA acts as an interpretable baseline. HDP is the stronger fit for exploration because it does not force a fixed number of topics upfront.</p></div>
-          </div>
-          <p>The output of this stage is the bridge artifact: <code>features_and_topics.pickle</code>, used by the clustering notebooks as the structured-plus-semantic feature source.</p>
-        </section>
+        <section id="code">
+          <h2>3. Feature engineering code</h2>
+          <p>The feature pipeline turns weakly structured report data into comparable numeric and categorical signals. The most important choices are removing corpus-wide text terms, parsing free-text duration, and encoding cyclic variables correctly.</p>
 
-        <section id="embeddings">
-          <h2>3. Semantic embeddings</h2>
-          <p>BERT-style embeddings complement topic models. Topic models capture recurring word groups; embeddings capture semantic similarity even when witnesses use different wording.</p>
-          <div class="pipeline">
-            <div class="pipe-step"><b>Clean summaries</b><span>Remove obvious noise while preserving report language.</span></div>
-            <div class="pipe-step"><b>DistilBERT</b><span>Convert each report summary into a dense vector.</span></div>
-            <div class="pipe-step"><b>Cache vectors</b><span>Store embeddings so the slow step is reproducible.</span></div>
-            <div class="pipe-step"><b>UMAP</b><span>Project semantic space into two dimensions.</span></div>
-            <div class="pipe-step"><b>Inspect</b><span>Read snippets from dense regions and outliers.</span></div>
-          </div>
-          <p>The exploratory page uses this to reveal neighborhoods: ordinary light reports, structured craft descriptions, MADAR node logs, editorial notes, and more unusual narrative accounts.</p>
-        </section>
+          <h3>Text normalization</h3>
+          <p>Generic sighting words dominate naive topic models. Removing them makes the topic model better at separating specific report types.</p>
+          <pre><code>STOPWORDS = {&quot;light&quot;, &quot;bright&quot;, &quot;sky&quot;, &quot;object&quot;, &quot;ufo&quot;, &quot;craft&quot;}
 
-        <section id="features">
-          <h2>4. Structured feature engineering</h2>
-          <p>The final clustering model combines text-derived features with structured signals from place, time, shape, and duration.</p>
-          <table>
-            <thead><tr><th>Feature family</th><th>Engineering</th><th>Reason</th></tr></thead>
-            <tbody>
-              <tr><td>Location</td><td>Latitude/longitude quantile bins; rare state/country categories collapsed.</td><td>Keeps coarse and regional spatial signal without over-weighting raw coordinates.</td></tr>
-              <tr><td>Time</td><td>Year, month, hour, day-of-week, season.</td><td>Captures cultural era and observation conditions.</td></tr>
-              <tr><td>Cyclic time</td><td>Sine/cosine encodings for hour and day-of-week.</td><td>Makes midnight and 23:00 neighbors in distance space.</td></tr>
-              <tr><td>Duration</td><td>Fuzzy parse free-text durations into seconds; log transform.</td><td>Turns messy strings into a comparable numeric feature.</td></tr>
-              <tr><td>Topics</td><td>HDP/LDA topic columns filtered by incidence.</td><td>Adds semantic information without exploding dimensionality.</td></tr>
-            </tbody>
-          </table>
+def clean_report_text(text):
+    text = str(text).lower()
+    text = re.sub(r&quot;https?://\S+&quot;, &quot; &quot;, text)
+    text = text.translate(str.maketrans(&quot;&quot;, &quot;&quot;, string.punctuation))
+    tokens = [
+        token for token in text.split()
+        if token not in STOPWORDS and len(token) &gt; 2
+    ]
+    return &quot; &quot;.join(tokens)</code></pre>
+
+          <h3>Duration parsing</h3>
+          <p>Durations arrive as strings such as <code>30 sec</code>, <code>about 3 minutes</code>, or <code>2 hrs</code>. The model converts them to seconds, then uses a log transform to compress the extreme right tail.</p>
+          <pre><code>def parse_duration_seconds(value):
+    text = str(value).lower()
+    number = re.search(r&quot;(\d+(?:\.\d+)?)&quot;, text)
+    if not number:
+        return np.nan
+
+    unit_seconds = {
+        &quot;sec&quot;: 1, &quot;second&quot;: 1,
+        &quot;min&quot;: 60, &quot;minute&quot;: 60,
+        &quot;hr&quot;: 3600, &quot;hour&quot;: 3600,
+    }
+
+    for unit, multiplier in unit_seconds.items():
+        if unit in text:
+            return float(number.group(1)) * multiplier
+
+    return np.nan</code></pre>
+
+          <h3>Cyclic time</h3>
+          <p>Clock time is circular. A raw hour column makes 23:00 and 00:00 look far apart even though they are adjacent. Sine/cosine pairs fix that geometry.</p>
           <pre><code>def encode_cyclic_hour(hour):
     angle = 2 * np.pi * hour / 24
     return np.sin(angle), np.cos(angle)
 
-# 23:00 and 00:00 become neighbors on the unit circle,
-# instead of sitting 23 numeric units apart.</code></pre>
+# 23:00 and 00:00 become neighbours on the unit circle.
+# They are no longer treated as 23 numeric units apart.</code></pre>
         </section>
 
-        <section id="pipeline">
-          <h2>5. Dimensionality reduction before clustering</h2>
-          <p>DBSCAN is distance-based, and high-dimensional sparse features make distance thresholds brittle. The clustering experiments compare PCA, FastICA, and UMAP before fitting density clusters.</p>
-          <div class="grid">
-            <div class="panel"><h3><i class="fa-solid fa-ruler-combined"></i> PCA</h3><p>A disciplined linear baseline that preserves global variance.</p></div>
-            <div class="panel"><h3><i class="fa-solid fa-wave-square"></i> FastICA</h3><p>A baseline for non-Gaussian independent components.</p></div>
-            <div class="panel"><h3><i class="fa-solid fa-share-nodes"></i> UMAP</h3><p>The most useful public view because it preserves local neighborhoods and makes clusters inspectable.</p></div>
-            <div class="panel"><h3><i class="fa-solid fa-circle-nodes"></i> DBSCAN</h3><p>Finds dense groups while leaving unusual reports as noise rather than forcing every report into a class.</p></div>
+        <section id="embeddings">
+          <h2>4. Semantic embeddings</h2>
+          <p>Topic models capture recurring word groups. DistilBERT embeddings add a denser semantic representation, so similar reports can sit near each other even when the exact vocabulary differs.</p>
+          <pre><code>tokenizer = DistilBertTokenizer.from_pretrained(&quot;distilbert-base-uncased&quot;)
+model = DistilBertModel.from_pretrained(&quot;distilbert-base-uncased&quot;)
+
+tokens = tokenizer(
+    summaries,
+    padding=True,
+    truncation=True,
+    return_tensors=&quot;pt&quot;
+)
+
+with torch.no_grad():
+    hidden = model(**tokens).last_hidden_state
+
+# Mean-pool token states into one vector per report.
+embeddings = hidden.mean(dim=1).cpu().numpy()</code></pre>
+          <div class="pipeline">
+            <div class="pipe-step"><b>Clean summaries</b><span>Normalize report language and reduce generic sighting terms.</span></div>
+            <div class="pipe-step"><b>Embed</b><span>Generate one dense vector per summary with DistilBERT.</span></div>
+            <div class="pipe-step"><b>Project</b><span>Use UMAP with cosine distance for a 2D semantic map.</span></div>
+            <div class="pipe-step"><b>Cluster</b><span>Fit density clusters over the reduced space.</span></div>
+            <div class="pipe-step"><b>Inspect</b><span>Read real report snippets from dense regions and noise points.</span></div>
           </div>
+          <div class="result"><b>Observed semantic groups:</b> the UMAP view separates ordinary light/orb reports, structured craft descriptions, MADAR node entries, NUFORC editorial notes, and unusual first-person narratives.</div>
+        </section>
+
+        <section id="reduction">
+          <h2>5. Dimensionality reduction before density clustering</h2>
+          <p>DBSCAN depends on distances. In high-dimensional sparse spaces, distances become less meaningful and <code>eps</code> becomes brittle. The experiments compare three compressed feature spaces before clustering.</p>
+          <table>
+            <thead><tr><th>Method</th><th>Role</th><th>Resulting interpretation</th></tr></thead>
+            <tbody>
+              <tr><td>PCA</td><td>Linear baseline</td><td>Useful sanity check for global variance, but weak at preserving local semantic neighborhoods.</td></tr>
+              <tr><td>FastICA</td><td>Independent-component baseline</td><td>Useful for non-Gaussian structure, less intuitive as a public map.</td></tr>
+              <tr><td>UMAP</td><td>Nonlinear neighborhood projection</td><td>Best visual/explanatory representation for semantic clusters and outliers.</td></tr>
+            </tbody>
+          </table>
         </section>
 
         <section id="bayesian">
-          <h2>6. Bayesian hyperparameter tuning</h2>
-          <p>DBSCAN has two sensitive knobs: <code>eps</code>, the neighborhood radius, and <code>min_samples</code>, the density threshold. A grid search wastes trials because most combinations produce all noise, one giant cluster, or many tiny fragments.</p>
-          <p>Bayesian optimization is a better fit: it uses the history of previous trials to choose more promising parameters, while the objective function rejects degenerate clusterings.</p>
-          <pre><code>def score_dbscan(labels, X):
-    n_clusters = count_non_noise_clusters(labels)
+          <h2>6. Bayesian hyperparameter tuning for DBSCAN</h2>
+          <p>DBSCAN has two sensitive parameters: <code>eps</code>, the neighborhood radius, and <code>min_samples</code>, the density threshold. Grid search spends too many evaluations on degenerate solutions. Bayesian optimization is more efficient because it uses previous trials to choose the next region to test.</p>
+          <pre><code>space = [
+    Real(0.05, 1.50, name=&quot;eps&quot;),
+    Integer(5, 80, name=&quot;min_samples&quot;),
+]
+
+@use_named_args(space)
+def objective(eps, min_samples):
+    labels = DBSCAN(eps=eps, min_samples=min_samples).fit_predict(X_umap)
+    n_clusters = len(set(labels)) - int(-1 in labels)
     noise_share = np.mean(labels == -1)
 
-    if n_clusters &lt; 2 or noise_share &gt; 0.80:
-        return penalty
+    if n_clusters &lt; 2 or n_clusters &gt; 30:
+        return 1.0
+    if noise_share &gt; 0.80:
+        return 1.0
 
-    return silhouette_score(X[labels != -1], labels[labels != -1])</code></pre>
+    keep = labels != -1
+    return -silhouette_score(X_umap[keep], labels[keep])
+
+result = gp_minimize(objective, space, n_calls=60, random_state=42)</code></pre>
           <table>
-            <thead><tr><th>Criterion</th><th>Why it matters</th></tr></thead>
+            <thead><tr><th>Guardrail</th><th>Reason</th></tr></thead>
             <tbody>
-              <tr><td>Silhouette score</td><td>Rewards compact, separated clusters.</td></tr>
-              <tr><td>Cluster-count guardrail</td><td>Rejects one-cluster and too-many-fragment solutions.</td></tr>
-              <tr><td>Noise-share guardrail</td><td>Keeps outliers useful without letting them swallow the dataset.</td></tr>
-              <tr><td>Interpretability</td><td>Prefers models that can be explained with profiles and examples.</td></tr>
+              <tr><td>Reject fewer than 2 clusters</td><td>A single cluster is not an analysis.</td></tr>
+              <tr><td>Reject more than 30 clusters</td><td>Too many tiny groups are hard to interpret.</td></tr>
+              <tr><td>Reject excessive noise</td><td>Noise is useful, but an all-noise model is a failure mode.</td></tr>
+              <tr><td>Optimize silhouette on non-noise points</td><td>Scores the density groups while letting DBSCAN keep outliers separate.</td></tr>
             </tbody>
           </table>
-          <div class="callout">This is the technical centerpiece: the project shows judgement about unsupervised learning, not just library usage.</div>
+          <div class="result"><b>Methodological choice:</b> the final model is selected for interpretable structure, not just the highest numerical score. For this project, a slightly lower metric can be better if the resulting clusters have readable profiles.</div>
+        </section>
+
+        <section id="results">
+          <h2>7. Results worth showing</h2>
+          <p>The public exploratory page contains the visual results; this methods page explains what they mean technically.</p>
+          <div class="grid">
+            <div class="panel"><h3><i class="fa-solid fa-clock"></i> Reporting volume</h3><p>Reports rise sharply after 2000 and peak around 2012-2014, consistent with reporting infrastructure and cultural attention rather than a direct claim about phenomena frequency.</p></div>
+            <div class="panel"><h3><i class="fa-solid fa-map-location-dot"></i> Geography</h3><p>Raw counts are dominated by population. Per-capita normalization surfaces lower-population states such as Vermont, Montana, Wyoming, and Washington.</p></div>
+            <div class="panel"><h3><i class="fa-solid fa-moon"></i> Shape by hour</h3><p>Most shapes peak around 20:00-23:00. Structured shapes such as disk/cigar retain a stronger daytime component than light/fireball reports.</p></div>
+            <div class="panel"><h3><i class="fa-solid fa-circle-nodes"></i> Clusters and noise</h3><p>The cached cluster stage reports 7 unique labels. The noise group contains meaningful outlier classes rather than random leftovers.</p></div>
+          </div>
+          <div class="result"><b>Outlier result:</b> the cached semantic outlier mask contains 750 reports. Many are not just "weird"; they include MADAR logs, NUFORC editorial notes, instrument-like wording, and unusually specific accounts.</div>
         </section>
 
         <section id="profiles">
-          <h2>7. Turning clusters into readable profiles</h2>
-          <p>The final interpretability layer is delta-variance profiling. For each cluster, compare feature behavior inside the group to the whole dataset. The largest differences become the cluster fingerprint.</p>
+          <h2>8. Cluster profiling with delta features</h2>
+          <p>A cluster label is only useful if it can be described. Delta profiling compares each cluster with the dataset baseline and ranks the features that make it different.</p>
+          <pre><code>def delta_profile(df, labels):
+    numeric = df.select_dtypes(include=&quot;number&quot;)
+    overall = numeric.mean()
+
+    rows = []
+    for cluster_id in sorted(set(labels) - {-1}):
+        cluster_mean = numeric.loc[labels == cluster_id].mean()
+        delta = (cluster_mean - overall).sort_values(key=abs, ascending=False)
+        rows.append({
+            &quot;cluster&quot;: cluster_id,
+            &quot;top_features&quot;: delta.head(8)
+        })
+
+    return rows</code></pre>
           <table>
-            <thead><tr><th>Readable label</th><th>Evidence to use</th></tr></thead>
+            <thead><tr><th>Readable cluster type</th><th>Evidence to inspect</th><th>Interpretation</th></tr></thead>
             <tbody>
-              <tr><td>Recent light/orb reports</td><td>Shape distribution, year distribution, summary snippets.</td></tr>
-              <tr><td>Structured craft descriptions</td><td>Disk/cigar/triangle shape rates, daytime signal, representative text.</td></tr>
-              <tr><td>MADAR or instrument logs</td><td>Topic terms, short automated summaries, outlier status.</td></tr>
-              <tr><td>Editorial or low-confidence reports</td><td>NUFORC note language, <code>HOAX??</code>, unusual source markers.</td></tr>
+              <tr><td>Recent light/orb reports</td><td>High light/orb share, recent years, evening hours</td><td>Common modern sighting language and observation conditions.</td></tr>
+              <tr><td>Structured craft reports</td><td>Disk/cigar/triangle shape rates, daytime signal, longer descriptions</td><td>Reports where witnesses describe object form, not just luminosity.</td></tr>
+              <tr><td>MADAR or instrument logs</td><td>MADAR terms, short summaries, automated phrasing</td><td>Machine-associated or sensor-adjacent entries form their own language pocket.</td></tr>
+              <tr><td>Editorial / low-confidence reports</td><td>NUFORC notes, <code>HOAX??</code>, anonymous/source markers</td><td>Outliers shaped by metadata and editorial skepticism.</td></tr>
             </tbody>
           </table>
-          <p>This keeps the clusters honest: a label only earns its place if the feature profile and real snippets agree.</p>
         </section>
 
         <section id="limits">
-          <h2>8. Limitations and next steps</h2>
-          <p>The analysis is intentionally careful. NUFORC reports are self-submitted and culturally mediated. Reporting volume reflects access, attention, and ease of submission. Topic models and embeddings discover language patterns, not ground truth.</p>
-          <div class="source-list" id="publish">
-            <div><b>Public overview</b><span><code>UFO_Analysis.ipynb</code> -> <code>ufo.html</code></span></div>
-            <div><b>Technical writeup</b><span><code>UFO_Technical_Methods.ipynb</code> -> <code>ufo-clustering.html</code></span></div>
-            <div><b>Source notebooks</b><span><code>BERT_embeddings</code>, topic modelling, clustering experiments.</span></div>
-            <div><b>Future upgrades</b><span>HDBSCAN, LLM-assisted cluster labels, reproducible feature pipeline.</span></div>
-          </div>
+          <h2>9. Limits and next steps</h2>
+          <p>The model discovers patterns in reporting, not ground truth about causes. NUFORC reports are self-submitted, culturally mediated, and shaped by changes in access, media attention, and reporting habits.</p>
+          <table>
+            <thead><tr><th>Limitation</th><th>Mitigation / next step</th></tr></thead>
+            <tbody>
+              <tr><td>Variable-density clusters</td><td>Try HDBSCAN so dense and sparse report families can coexist more naturally.</td></tr>
+              <tr><td>Manual cluster naming</td><td>Use representative snippets plus delta profiles to generate LLM-assisted labels, then manually review them.</td></tr>
+              <tr><td>Feature pipeline spread across experiments</td><td>Extract a reproducible script that regenerates <code>features_and_topics.pickle</code>.</td></tr>
+              <tr><td>Self-reporting bias</td><td>Add a compact data card explaining what the dataset can and cannot support.</td></tr>
+            </tbody>
+          </table>
           <div class="tag-row" aria-label="Technologies used">
             <span class="tag">Python</span>
             <span class="tag">Pandas</span>
